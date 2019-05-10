@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - db-data:/var/lib/mongo/data/db
+    ports:
+      - "27017:27017"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      swarm_net:
+        ipv4_address: 172.28.1.1
+  web-api:
+    image: 127.0.0.1:5000/web-api
+    build: ./API
+    depends_on:
+      - mongo
+    ports:
+      - "49160:8080"
+    networks:
+      swarm_net:
+        ipv4_address: 172.28.1.2
+  web-app:
+    image: 127.0.0.1:5000/web-app
+    build: ./Web_App/webApp
+    depends_on:
+      - mongo
+      - web-api
+    ports:
+      - "8080:80"
+    networks:
+      swarm_net:
+        ipv4_address: 172.28.1.3
+volumes:
+  db-data:
+
+networks:
+    swarm_net:
+        ipam:
+            driver: overlay
+            config:
+                - subnet: 172.28.0.0/16

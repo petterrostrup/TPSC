@@ -1,0 +1,3 @@
+docker service create --name="web-api" --publish 49160:8080 petterrostrup/node-api:latest
+
+docker service create --name="web-app" --publish 8080:80 petterrostrup/web-app:latest

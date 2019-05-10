@@ -1,11 +1,12 @@
-// app/models/Temperature.js
+// app/models/temperature.js
 
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 var TemperatureSchema   = new Schema({
+    sensor: String,
     time: Date,
-    value: Number
+    temp: Number
 });
 
 module.exports = mongoose.model('Temperature', TemperatureSchema);

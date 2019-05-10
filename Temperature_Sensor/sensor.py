@@ -4,20 +4,24 @@ import datetime
 import json
 import urllib.request
 
-myurl = "http://www.testmycode.com"
+myurl = "http://127.0.0.1:49160/api/temp"
 
 tempBot = 16
 tempTop = 22
 
 percentile = 0.10
 direction = 0
-timeToFlip = 300
-timeToSend = 600
+timeToFlip = 150
+timeToSend = 300
 
 temp = 20
 flipTime = 0
 sendTime = 0
 tempList = []
+
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 while True:
     percentCheck = random.random()
@@ -51,11 +55,13 @@ while True:
     if sendTime == timeToSend:
         req = urllib.request.Request(myurl)
         req.add_header('Content-Type', 'application/json; charset=utf-8')
-        jsondata = json.dumps(tempList)
+        jsondata = json.dumps(tempList, default = myconverter)
         jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
         req.add_header('Content-Length', len(jsondataasbytes))
         print (jsondataasbytes)
         response = urllib.request.urlopen(req, jsondataasbytes)
+        sendTime = 0
+        tempList = []
 
     print("This is the temp in Celsius:" + str(temp))
     time.sleep(1)

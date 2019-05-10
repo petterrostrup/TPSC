@@ -9,6 +9,9 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent implements OnInit {
   title = 'webApp';
 
+  public tempData: any;
+
+
   constructor(private httpClient: HttpClient) { }
   public barChartOptions = {
     scaleShowVerticalLines: false,
@@ -22,9 +25,11 @@ export class AppComponent implements OnInit {
     {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
   ];
 
+  
   get_bears() {
-    this.httpClient.get('http://localhost:8080/api/bears').subscribe((res) => {
+    this.httpClient.get('http://localhost:49160/api/temp').subscribe((res) => {
         console.log(res);
+        this.tempData = res;
     });
   }
   ngOnInit() {
