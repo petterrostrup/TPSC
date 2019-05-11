@@ -7,6 +7,13 @@ services:
     ports:
       - "27017:27017"
     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 1
       placement:
         constraints: [node.role == manager]
     networks:
@@ -17,6 +24,14 @@ services:
     build: ./API
     depends_on:
       - mongo
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 2
     ports:
       - "49160:8080"
     networks:
@@ -25,6 +40,14 @@ services:
   web-app:
     image: 127.0.0.1:5000/web-app
     build: ./Web_App/webApp
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      mode: replicated
+      replicas: 2
     depends_on:
       - mongo
       - web-api
@@ -38,7 +61,7 @@ volumes:
 
 networks:
     swarm_net:
-        ipam:
-            driver: overlay
-            config:
-                - subnet: 172.28.0.0/16
+      driver: overlay
+      ipam:
+        config:
+            - subnet: 172.28.0.0/16

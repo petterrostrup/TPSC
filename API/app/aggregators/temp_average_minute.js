@@ -14,7 +14,7 @@ exports.average_on_minute = function (temperatures) {
             // checks time differences down to minutes 
             if ((compareDate.getFullYear() == compareToDate.getFullYear()) && 
             (compareDate.getMonth() == compareToDate.getMonth()) && 
-            (compareDate.getDay() == compareToDate.getDay()) && 
+            (compareDate.getDate() == compareToDate.getDate()) && 
             (compareDate.getHours() == compareToDate.getHours()) && 
             (compareDate.getMinutes() == compareToDate.getMinutes())) {
                 // basic average of the new temperatures

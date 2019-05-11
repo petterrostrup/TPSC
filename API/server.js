@@ -7,7 +7,8 @@
 var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
-var aggregator = require('./app/aggregators/temp_average_minute')
+var aggregator = require('./app/aggregators/temp_average_minute');
+var mongoose   = require('mongoose');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -22,11 +23,17 @@ app.use(function(req, res, next) {
 
 var port = process.env.PORT || 8080;        // set our port
 
-var mongoose   = require('mongoose');
-mongoose.connect('mongodb://mongo:27017/'); // connect to our database
-mongoose.set('useNewUrlParser', true);
+// mongoose connection with retry on fail
+var connectWithRetry = function() {
+    return mongoose.connect('mongodb://mongo:27017/', function(err) {
+      if (err) {
+        console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+        setTimeout(connectWithRetry, 5000);
+      }
+    });
+  };
+  connectWithRetry();
 
-var Bear     = require('./app/models/bear');
 var Temperature = require('./app/models/temperature')
 // ROUTES FOR OUR API
 // =============================================================================
@@ -44,42 +51,6 @@ router.use(function(req, res, next) {
 router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
-
-// more routes for our API will happen here
-
-// on routes that end in /bears
-// ----------------------------------------------------
-router.route('/bears')
-
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
-    .post(function(req, res) {
-
-        var bear = new Bear();      // create a new instance of the Bear model
-        bear.name = req.body.name;  // set the bears name (comes from the request)
-        console.log(bear);
-
-        // save the bear and check for errors
-        bear.save(function(err) {
-            if (err)
-                res.send(err);
-
-            res.json({ message: 'Bear created!' });
-        });
-
-        
-
-    })
-
-    // get all the bears (accessed at GET http://localhost:8080/api/bears)
-    .get(function(req, res) {
-        console.log("Getting Bears");
-        Bear.find(function(err, bears) {
-            if (err)
-                res.send(err);
-
-            res.json(bears);
-        });
-    });
 
 // on routes that end in /temp
 // ----------------------------------------------------

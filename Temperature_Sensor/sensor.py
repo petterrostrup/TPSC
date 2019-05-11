@@ -11,8 +11,8 @@ tempTop = 22
 
 percentile = 0.10
 direction = 0
-timeToFlip = 150
-timeToSend = 300
+timeToFlip = 30
+timeToSend = 60
 
 temp = 20
 flipTime = 0
