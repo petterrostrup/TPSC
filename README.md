@@ -8,7 +8,7 @@ How-To:
 2. Clone this repo and change directory into it
 3. Set up docker swarm (https://docs.docker.com/engine/swarm/swarm-mode/)
 4. Set up docker registry (https://docs.docker.com/engine/swarm/stack-deploy/)
-5. something
+5. Create volume to be used for database with "docker volume create mongo_data". Needs to be an external volume as to be persistent.
 6. Build the images: Use command "docker-compose build"
 7. Test with "docker-compose up"
 8. Now it should be working on your local machine. Go to http://localhost:8080/ for WebApp.
@@ -16,3 +16,6 @@ How-To:
 10. Use "docker-compose push" to push images to registry.
 11. Use "docker stack deploy --compose-file docker-compose.yml tpsc" to deploy the stack
 12. Now it should be working in the swarm. Go to http://localhost:8080/ for WebApp.
+
+
+Remember to build and push the images when making changes to the code.
