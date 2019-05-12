@@ -19,3 +19,5 @@ How-To:
 
 
 Remember to build and push the images when making changes to the code.
+
+Docker-machine was used to populate the swarm in this example. Any other viable candidate can be added when using the proper worker token for the network.
