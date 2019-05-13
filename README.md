@@ -20,4 +20,6 @@ How-To:
 
 Remember to build and push the images when making changes to the code.
 
+After the system is up, remember to run the python scripts in /Temperature_Sensor
+
 Docker-machine was used to populate the swarm in this example. Any other viable candidate can be added when using the proper worker token for the network.
