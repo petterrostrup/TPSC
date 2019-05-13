@@ -46,7 +46,7 @@ while True:
         flipTime =  0
     
     newObject = {
-        "sensor": "temp-room-1",
+        "sensor": "temp-apartment-1",
         "time": datetime.datetime.now(),
         "temp": temp
     }

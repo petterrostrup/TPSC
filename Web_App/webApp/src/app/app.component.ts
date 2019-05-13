@@ -21,7 +21,14 @@ export class AppComponent implements OnInit {
     scales: {
       yAxes: [{
         display: true,
-        labelString: "Temp in Celsius"
+        scaleLabel: {
+          display: true,
+          labelString: "Temp in Celsius"
+        },
+        ticks: {
+          suggestedMin: 10,
+          suggestedMax: 30
+        }
       }],
       xAxes: [{
         display: true,
@@ -58,13 +65,20 @@ export class AppComponent implements OnInit {
 
   splitAndSort(dataToSort: [Temperature]): [[Temperature]] {
     let splitList: [[Temperature]];
+    let itemFound = false;
     dataToSort.forEach(element => {
+      itemFound = false;
       if (typeof splitList != 'undefined') {
-        for (let i = 0; i < splitList.length; i++) {
+        let listLength = splitList.length;
+        for (let i = 0; i < listLength; i++) {
+          listLength = splitList.length;
           if (splitList[i][0].sensor == element.sensor) {
             splitList[i].push(element);
+            itemFound = true;
             break;
           }
+        }
+        if (!itemFound) {
           splitList.push([element]);
         }
       }
@@ -129,24 +143,19 @@ export class AppComponent implements OnInit {
      console.log(fromDate);
      let minutes = (toDate.getTime() - fromDate.getTime()) / 1000;
      minutes /= 60;
-     minutes = Math.abs(Math.round(minutes));
+     minutes = Math.abs(Math.round(minutes)) + 1;
 
      console.log(minutes);
-     for (let i = 0; i< (minutes+1); i++) {
+     for (let i = 0; i< (minutes); i++) {
        labelList.push(fromDate.toLocaleString());
        fromDate = new Date(fromDate.getTime() + 60000);
      };
 
     labelListData.forEach((e, i) => {
-      if (dataList.length == 0) {
+      if (typeof dataList[i] == 'undefined' ) {
         dataList.push({
-          data: [],
-          label: e[0].sensor
-        })
-      }
-      else if (dataList[i].label != e[0].sensor) {
-        dataList.push({
-          data: [],
+          data: new Array(minutes),
+          fill: false,
           label: e[0].sensor
         })
       }
@@ -154,6 +163,7 @@ export class AppComponent implements OnInit {
         let newLabel = f.time.toLocaleString();
         labelList.forEach((g, j) => {
           if (newLabel == g) {
+            console.log(dataList[i]);
             dataList[i].data[j] = f.temp;
           }
         });

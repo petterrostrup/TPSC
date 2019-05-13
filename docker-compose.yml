@@ -3,7 +3,7 @@ services:
   mongo:
     image: mongo
     volumes:
-      - mongo_data:/var/lib/mongo/data/db
+      - mongo_data:/data
     ports:
       - "27017:27017"
     deploy:
